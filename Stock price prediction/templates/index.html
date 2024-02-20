@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Price Prediction</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Stock Price Prediction</h2>
+        <form id="predictionForm">
+            <label for="stockCode">Enter Stock Code:</label>
+            <input type="text" id="stockCode" name="stockCode" required>
+
+            <button type="button" onclick="predictPrice()">Predict Price</button>
+        </form>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        async function predictPrice() {
+            const stockCode = document.getElementById("stockCode").value;
+
+            try {
+                const response = await fetch(`/predict?stockCode=${stockCode}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                document.getElementById("result").innerHTML = `Predicted Price: ${result.predictedPrice}`;
+            } catch (error) {
+                console.error("Error:", error);
+                document.getElementById("result").innerHTML = "Error predicting price.";
+            }
+        }
+    </script>
+</body>
+</html>
